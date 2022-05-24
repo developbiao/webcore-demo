@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	//
 	server := &http.Server{
 		// Customer request core handler
 		Handler: framework.NewCore(),
