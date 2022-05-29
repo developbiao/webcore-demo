@@ -1,7 +1,12 @@
 package framework
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"errors"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"sync"
@@ -171,4 +176,48 @@ func (ctx *Context) FormAll() map[string][]string {
 		return map[string][]string(ctx.request.Form)
 	}
 	return map[string][]string{}
+}
+
+// #End Form methods
+
+func (ctx *Context) BindJson(obj interface{}) error {
+	if ctx.request != nil {
+		body, err := ioutil.ReadAll(ctx.request.Body)
+		if err != nil {
+			return err
+		}
+		ctx.request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+		err = json.Unmarshal(body, obj)
+		if err != nil {
+			return err
+		}
+	} else {
+		return errors.New("ctx.request empty")
+	}
+	return nil
+}
+
+// Json
+func (ctx *Context) Json(status int, obj interface{}) error {
+	if ctx.hasTimeout {
+		log.Println("has timeout")
+		return nil
+	}
+	ctx.responseWriter.Header().Set("Content-Type", "application/json")
+	ctx.responseWriter.WriteHeader(status)
+	byt, err := json.Marshal(obj)
+	if err != nil {
+		ctx.responseWriter.WriteHeader(500)
+		return nil
+	}
+	ctx.responseWriter.Write(byt)
+	return nil
+}
+
+func (ctx *Context) HTML(status int, obj interface{}, template string) error {
+	return nil
+}
+
+func (ctx *Context) Text(status int, obj string) error {
+	return nil
 }
