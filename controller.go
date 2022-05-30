@@ -16,7 +16,7 @@ func FooControllerHandler(c *framework.Context) error {
 	durationCtx, cancel := context.WithTimeout(c.BaseContext(), time.Duration(1*time.Second))
 	defer cancel()
 
-	// Wiled go routine
+	// Wild go routine
 	go func() {
 		time.Sleep(10 * time.Second)
 		c.Json(200, "ok")
