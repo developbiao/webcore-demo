@@ -94,3 +94,8 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 
 	router(ctx)
 }
+
+// Group http wrapper
+func (c *Core) Group(prefix string) *Group {
+	return NewGroup(c, prefix)
+}
