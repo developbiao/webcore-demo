@@ -8,24 +8,16 @@ import (
 
 // Framework core struct
 type Core struct {
-	// Level 2 map
-	router map[string]map[string]ControllerHandler
+	router map[string]*Tree
 }
 
 // Init framework core
 func NewCore() *Core {
-	// Define level 2 map
-	getRouter := map[string]ControllerHandler{}
-	postRouter := map[string]ControllerHandler{}
-	putRouter := map[string]ControllerHandler{}
-	deleteRouter := map[string]ControllerHandler{}
-
-	// Put level 2 routers to level 1 map
-	router := map[string]map[string]ControllerHandler{}
-	router["GET"] = getRouter
-	router["POST"] = postRouter
-	router["PUT"] = putRouter
-	router["DELETE"] = deleteRouter
+	router := map[string]*Tree{}
+	router["GET"] = NewTree()
+	router["POST"] = NewTree()
+	router["PUT"] = NewTree()
+	router["DELETE"] = NewTree()
 
 	return &Core{router: router}
 
@@ -33,26 +25,30 @@ func NewCore() *Core {
 
 // Get method
 func (c *Core) Get(url string, handler ControllerHandler) {
-	upperUrl := strings.ToUpper(url)
-	c.router["GET"][upperUrl] = handler
+	if err := c.router["GET"].AddRoute(url, handler); err != nil {
+		log.Fatal("add router error:", err)
+	}
 }
 
 // Post method
 func (c *Core) Post(url string, handler ControllerHandler) {
-	upperUrl := strings.ToUpper(url)
-	c.router["POST"][upperUrl] = handler
+	if err := c.router["POST"].AddRoute(url, handler); err != nil {
+		log.Fatal("add router error:", err)
+	}
 }
 
 // Put method
 func (c *Core) Put(url string, handler ControllerHandler) {
-	upperUrl := strings.ToUpper(url)
-	c.router["PUT"][upperUrl] = handler
+	if err := c.router["PUT"].AddRoute(url, handler); err != nil {
+		log.Fatal("add router error:", err)
+	}
 }
 
 // Delete method
 func (c *Core) Delete(url string, handler ControllerHandler) {
-	upperUrl := strings.ToUpper(url)
-	c.router["DELETE"][upperUrl] = handler
+	if err := c.router["DELETE"].AddRoute(url, handler); err != nil {
+		log.Fatal("add router error:", err)
+	}
 }
 
 // Find route, if not found, return nil
@@ -60,15 +56,11 @@ func (c *Core) FindRouteByRequest(request *http.Request) ControllerHandler {
 	// uri and method must be convert to uppercase
 	uri := request.URL.Path
 	method := request.Method
-	upperUri := strings.ToUpper(uri)
 	upperMethod := strings.ToUpper(method)
 
 	// Find from level 1 map
 	if methodHandlers, ok := c.router[upperMethod]; ok {
-		// Find from level 2 map
-		if handler, ok := methodHandlers[upperUri]; ok {
-			return handler
-		}
+		return methodHandlers.FindHandler(uri)
 	}
 	return nil
 }

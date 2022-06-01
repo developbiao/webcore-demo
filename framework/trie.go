@@ -1,11 +1,20 @@
 package framework
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 // Tree
 type Tree struct {
 	root *node // root node
+}
 
+// New Tree
+func NewTree() *Tree {
+	return &Tree{
+		root: NewNode(),
+	}
 }
 
 // Node
@@ -92,4 +101,64 @@ func (n *node) matchNode(uri string) *node {
 	}
 
 	return nil
+}
+
+// Add route
+/*
+/book/list
+/book/:id	(conflict)
+/book/:id/name
+/book/:student/age
+/:user/name
+/:user/name:age (conflict)
+*/
+func (tree *Tree) AddRoute(uri string, handler ControllerHandler) error {
+	n := tree.root
+	if n.matchNode(uri) != nil {
+		return errors.New("route exists:" + uri)
+	}
+	segments := strings.Split(uri, "/")
+	for index, segment := range segments {
+		if !isWildSegment(segment) {
+			segment = strings.ToUpper(segment)
+		}
+		isLast := index == len(segments)-1
+
+		var objNode *node // Identify adapter node
+
+		childNodes := n.filterChildNodes(segment)
+		// exists match nodes
+		if len(childNodes) > 0 {
+			for _, cnode := range childNodes {
+				if cnode.segment == segment {
+					objNode = cnode
+					break
+				}
+			}
+		}
+
+		if objNode == nil {
+			// Create node
+			cnode := NewNode()
+			cnode.segment = segment
+			if isLast {
+				cnode.isLast = isLast
+				cnode.handler = handler
+			}
+			n.childs = append(n.childs, cnode)
+			objNode = cnode
+		}
+
+	}
+
+	return nil
+}
+
+// Match uri return handler
+func (tree *Tree) FindHandler(uri string) ControllerHandler {
+	matchNode := tree.root.matchNode(uri)
+	if matchNode == nil {
+		return nil
+	}
+	return matchNode.handler
 }
