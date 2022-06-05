@@ -25,28 +25,28 @@ func NewCore() *Core {
 
 // Get method
 func (c *Core) Get(url string, handler ControllerHandler) {
-	if err := c.router["GET"].AddRoute(url, handler); err != nil {
+	if err := c.router["GET"].AddRouter(url, handler); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Post method
 func (c *Core) Post(url string, handler ControllerHandler) {
-	if err := c.router["POST"].AddRoute(url, handler); err != nil {
+	if err := c.router["POST"].AddRouter(url, handler); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Put method
 func (c *Core) Put(url string, handler ControllerHandler) {
-	if err := c.router["PUT"].AddRoute(url, handler); err != nil {
+	if err := c.router["PUT"].AddRouter(url, handler); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Delete method
 func (c *Core) Delete(url string, handler ControllerHandler) {
-	if err := c.router["DELETE"].AddRoute(url, handler); err != nil {
+	if err := c.router["DELETE"].AddRouter(url, handler); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
