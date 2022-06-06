@@ -22,6 +22,11 @@ type Context struct {
 	hasTimeout bool
 	// Write safe
 	writerMux *sync.Mutex
+
+	// Current request handler chain
+	handlers []ControllerHandler
+	// Current coursor index
+	index int
 }
 
 // New Context
@@ -31,6 +36,7 @@ func NewContext(r *http.Request, w http.ResponseWriter) *Context {
 		responseWriter: w,
 		ctx:            r.Context(),
 		writerMux:      &sync.Mutex{},
+		index:          -1,
 	}
 }
 
@@ -219,5 +225,21 @@ func (ctx *Context) HTML(status int, obj interface{}, template string) error {
 }
 
 func (ctx *Context) Text(status int, obj string) error {
+	return nil
+}
+
+// Set handlers on context
+func (ctx *Context) SetHandlers(handlers []ControllerHandler) {
+	ctx.handlers = handlers
+}
+
+// Next
+func (ctx *Context) Next() error {
+	ctx.index++
+	if ctx.index < len(ctx.handlers) {
+		if err := ctx.handlers[ctx.index](ctx); err != nil {
+			return err
+		}
+	}
 	return nil
 }

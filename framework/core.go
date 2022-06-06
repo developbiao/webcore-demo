@@ -71,20 +71,21 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	ctx := NewContext(request, response)
 
 	// Find route
-	router := c.FindRouteByRequest(request)
-	if router == nil {
+	handlers := c.FindRouteByRequest(request)
+	if handlers == nil {
 		ctx.Json(404, "Not found")
 		return
 	}
 
+	// Set context handlers
+	ctx.SetHandlers(handlers)
+
 	// Call route
-	if err := router(ctx); err != nil {
+	if err := ctx.Next(); err != nil {
 		ctx.Json(500, "Internal server error")
 
 	}
 	log.Println("core.router")
-
-	router(ctx)
 }
 
 // Group http wrapper
