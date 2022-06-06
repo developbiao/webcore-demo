@@ -1,9 +1,13 @@
 package main
 
-import "github.com/developbiao/webcore-demo/framework"
+import (
+	"time"
+
+	"github.com/developbiao/webcore-demo/framework"
+)
 
 func registerRouter(core *framework.Core) {
-	core.Get("/user/login", UserLoginController)
+	core.Get("/user/login", framework.TimeoutHandler(UserLoginController, time.Second))
 
 	// Group prefix routes
 	subjectApi := core.Group("/subject")
