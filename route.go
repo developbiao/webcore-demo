@@ -1,13 +1,12 @@
 package main
 
 import (
-	"time"
-
 	"github.com/developbiao/webcore-demo/framework"
+	"github.com/developbiao/webcore-demo/middleware"
 )
 
 func registerRouter(core *framework.Core) {
-	core.Get("/user/login", framework.TimeoutHandler(UserLoginController, time.Second))
+	core.Get("/user/login", middleware.Test3(), UserLoginController)
 
 	// Group prefix routes
 	subjectApi := core.Group("/subject")

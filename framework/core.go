@@ -8,7 +8,8 @@ import (
 
 // Framework core struct
 type Core struct {
-	router map[string]*Tree
+	router      map[string]*Tree
+	middlewares []ControllerHandler
 }
 
 // Init framework core
@@ -23,36 +24,41 @@ func NewCore() *Core {
 
 }
 
+// Register middleware
+func (c *Core) Use(middleware ...ControllerHandler) {
+	c.middlewares = append(c.middlewares, middleware...)
+}
+
 // Get method
-func (c *Core) Get(url string, handler ControllerHandler) {
-	if err := c.router["GET"].AddRouter(url, handler); err != nil {
+func (c *Core) Get(url string, handlers ...ControllerHandler) {
+	if err := c.router["GET"].AddRouter(url, handlers); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Post method
-func (c *Core) Post(url string, handler ControllerHandler) {
-	if err := c.router["POST"].AddRouter(url, handler); err != nil {
+func (c *Core) Post(url string, handlers ...ControllerHandler) {
+	if err := c.router["POST"].AddRouter(url, handlers); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Put method
-func (c *Core) Put(url string, handler ControllerHandler) {
-	if err := c.router["PUT"].AddRouter(url, handler); err != nil {
+func (c *Core) Put(url string, handlers ...ControllerHandler) {
+	if err := c.router["PUT"].AddRouter(url, handlers); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Delete method
-func (c *Core) Delete(url string, handler ControllerHandler) {
-	if err := c.router["DELETE"].AddRouter(url, handler); err != nil {
+func (c *Core) Delete(url string, handlers ...ControllerHandler) {
+	if err := c.router["DELETE"].AddRouter(url, handlers); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Find route, if not found, return nil
-func (c *Core) FindRouteByRequest(request *http.Request) ControllerHandler {
+func (c *Core) FindRouteByRequest(request *http.Request) []ControllerHandler {
 	// uri and method must be convert to uppercase
 	uri := request.URL.Path
 	method := request.Method
