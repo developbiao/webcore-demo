@@ -23,5 +23,4 @@ func registerRouter(core *framework.Core) {
 			subjectInnerApi.Get("/name", SubjectNameController)
 		}
 	}
-
 }

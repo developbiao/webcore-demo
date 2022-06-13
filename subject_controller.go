@@ -1,6 +1,10 @@
 package main
 
-import "github.com/developbiao/webcore-demo/framework"
+import (
+	"time"
+
+	"github.com/developbiao/webcore-demo/framework"
+)
 
 // SubjectAddController
 func SubjectAddController(c *framework.Context) error {
@@ -34,6 +38,7 @@ func SubjectGetController(c *framework.Context) error {
 
 // SubjectNameController
 func SubjectNameController(c *framework.Context) error {
+	time.Sleep(time.Second * 2)
 	c.Json(200, "ok, SubjectNameController")
 	return nil
 }

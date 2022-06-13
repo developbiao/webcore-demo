@@ -10,12 +10,13 @@ import (
 
 func main() {
 	core := framework.NewCore()
-	core.Use(
-		middleware.Test1(),
-		middleware.Test2(),
-	)
-	subjectApi := core.Group("/subject")
-	subjectApi.Use(middleware.Test3())
+	// core.Use(
+	// 	middleware.Test1(),
+	// 	middleware.Test2(),
+	// )
+
+	core.Use(middleware.Recovery())
+	core.Use(middleware.Cost())
 
 	registerRouter(core)
 	server := &http.Server{

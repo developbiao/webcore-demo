@@ -10,14 +10,18 @@ type IGroup interface {
 
 	// Implement Group embedding
 	Group(string) IGroup
+
+	// Embeding middleware
+	Use(middlewares ...ControllerHandler)
 }
 
 // Group struct
 type Group struct {
-	core        *Core  // point core structure
-	parent      *Group // if exists point preve group
-	prefix      string // group prefix
-	middlewares []ControllerHandler
+	core   *Core  // point core structure
+	parent *Group // if exists point preve group
+	prefix string // group prefix
+
+	middlewares []ControllerHandler // save middlewares
 }
 
 // NewGroup

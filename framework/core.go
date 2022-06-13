@@ -8,8 +8,8 @@ import (
 
 // Framework core struct
 type Core struct {
-	router      map[string]*Tree
-	middlewares []ControllerHandler
+	router      map[string]*Tree    // all routers
+	middlewares []ControllerHandler // set middlewares
 }
 
 // Init framework core
@@ -20,39 +20,43 @@ func NewCore() *Core {
 	router["PUT"] = NewTree()
 	router["DELETE"] = NewTree()
 
-	return &Core{router: router}
-
+	core := &Core{router: router}
+	return core
 }
 
 // Register middleware
-func (c *Core) Use(middleware ...ControllerHandler) {
-	c.middlewares = append(c.middlewares, middleware...)
+func (c *Core) Use(middlewares ...ControllerHandler) {
+	c.middlewares = append(c.middlewares, middlewares...)
 }
 
 // Get method
 func (c *Core) Get(url string, handlers ...ControllerHandler) {
-	if err := c.router["GET"].AddRouter(url, handlers); err != nil {
+	allHandlers := append(c.middlewares, handlers...)
+	if err := c.router["GET"].AddRouter(url, allHandlers); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Post method
 func (c *Core) Post(url string, handlers ...ControllerHandler) {
-	if err := c.router["POST"].AddRouter(url, handlers); err != nil {
+	allHandlers := append(c.middlewares, handlers...)
+	if err := c.router["POST"].AddRouter(url, allHandlers); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Put method
 func (c *Core) Put(url string, handlers ...ControllerHandler) {
-	if err := c.router["PUT"].AddRouter(url, handlers); err != nil {
+	allHandlers := append(c.middlewares, handlers...)
+	if err := c.router["PUT"].AddRouter(url, allHandlers); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
 
 // Delete method
 func (c *Core) Delete(url string, handlers ...ControllerHandler) {
-	if err := c.router["DELETE"].AddRouter(url, handlers); err != nil {
+	allHandlers := append(c.middlewares, handlers...)
+	if err := c.router["DELETE"].AddRouter(url, allHandlers); err != nil {
 		log.Fatal("add router error:", err)
 	}
 }
