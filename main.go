@@ -13,8 +13,10 @@ func main() {
 	core.Use(
 		middleware.Test1(),
 		middleware.Test2(),
-		middleware.Test3(),
 	)
+	subjectApi := core.Group("/subject")
+	subjectApi.Use(middleware.Test3())
+
 	registerRouter(core)
 	server := &http.Server{
 		// Customer request core handler

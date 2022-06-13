@@ -11,7 +11,8 @@ func registerRouter(core *framework.Core) {
 	// Group prefix routes
 	subjectApi := core.Group("/subject")
 	{
-		subjectApi.Delete("/:id", SubjectDelController)
+		// Apply middleware test1
+		subjectApi.Delete("/:id", middleware.Test1(), SubjectDelController)
 		subjectApi.Put("/:id", SubjectUpdateController)
 		subjectApi.Get("/:id", SubjectGetController)
 		subjectApi.Get("/list/all", SubjectListController)

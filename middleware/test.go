@@ -7,7 +7,7 @@ import (
 )
 
 func Test1() framework.ControllerHandler {
-	return func(c *framework.Context) {
+	return func(c *framework.Context) error {
 		fmt.Println("middleware pre test01")
 		c.Next()
 		fmt.Println("middleware post test01")
@@ -16,7 +16,7 @@ func Test1() framework.ControllerHandler {
 }
 
 func Test2() framework.ControllerHandler {
-	return func(c *framework.Context) {
+	return func(c *framework.Context) error {
 		fmt.Println("middleware pre test02")
 		c.Next()
 		fmt.Println("middleware post test02")
@@ -25,7 +25,7 @@ func Test2() framework.ControllerHandler {
 }
 
 func Test3() framework.ControllerHandler {
-	return func(c *framework.Context) {
+	return func(c *framework.Context) error {
 		fmt.Println("middleware pre test03")
 		c.Next()
 		fmt.Println("middleware post test03")
