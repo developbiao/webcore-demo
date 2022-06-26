@@ -87,14 +87,6 @@ func (ctx *Context) Value(key interface{}) interface{} {
 
 // #End Form methods
 
-func (ctx *Context) HTML(status int, obj interface{}, template string) error {
-	return nil
-}
-
-func (ctx *Context) Text(status int, obj string) error {
-	return nil
-}
-
 // Set handlers on context
 func (ctx *Context) SetHandlers(handlers []ControllerHandler) {
 	ctx.handlers = handlers

@@ -2,6 +2,9 @@ package framework
 
 import (
 	"encoding/json"
+	"encoding/xml"
+	"fmt"
+	"html/template"
 	"net/http"
 	"net/url"
 )
@@ -80,5 +83,87 @@ func (ctx *Context) Json(obj interface{}) *Context {
 	}
 	ctx.SetHeader("Content-Type", "application/json")
 	ctx.responseWriter.Write(byt)
+	return ctx
+}
+
+// Jsonp output
+func (ctx *Context) Jsonp(obj interface{}) *Context {
+	// Get request callback parameters
+	callbackFunc, _ := ctx.QueryString("callback", "callback_function")
+	ctx.SetHeader("Context-Type", "application/javascript")
+	// Prevent attack XSS
+	callback := template.JSEscapeString(callbackFunc)
+
+	// Output function
+	_, err := ctx.responseWriter.Write([]byte(callback))
+	if err != nil {
+		return ctx
+	}
+
+	// Output left parenthesis
+	_, err = ctx.responseWriter.Write([]byte("("))
+	if err != nil {
+		return ctx
+	}
+
+	// Fcuntion paramters
+	ret, err := json.Marshal(obj)
+	if err != nil {
+		return ctx
+	}
+	_, err = ctx.responseWriter.Write(ret)
+	if err != nil {
+		return ctx
+	}
+
+	// Output right parenthesis
+	_, err = ctx.responseWriter.Write([]byte(")"))
+	if err != nil {
+		return ctx
+	}
+	return ctx
+
+}
+
+// Xml output
+func (ctx *Context) Xml(obj interface{}) *Context {
+	byt, err := xml.Marshal(obj)
+	if err != nil {
+		return ctx.SetStatus(http.StatusInternalServerError)
+		ctx.SetHeader("Content-Type", "application/html")
+	}
+	ctx.SetHeader("Content-Type", "application/html")
+	ctx.responseWriter.Write(byt)
+	return ctx
+}
+
+// Html output
+func (ctx *Context) Html(file string, obj interface{}) *Context {
+	// Read template file create template instance
+	t, err := template.New("output").ParseFiles(file)
+	if err != nil {
+		return ctx
+	}
+
+	// Execute obj
+	if err := t.Execute(ctx.responseWriter, obj); err != nil {
+		return ctx
+	}
+
+	ctx.SetHeader("Context-Type", "application/html")
+	return ctx
+}
+
+// Text
+func (ctx *Context) Text(format string, values ...interface{}) *Context {
+	out := fmt.Sprintf(format, values...)
+	ctx.SetHeader("Content-Type", "application/text")
+	ctx.responseWriter.Write([]byte(out))
+	return ctx
+}
+
+// Redirect
+func (ctx *Context) Redirect(path string) *Context {
+	http.Redirect(ctx.responseWriter, ctx.request, path, http.StatusMovedPermanently)
 	return ctx
 }
