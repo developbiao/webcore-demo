@@ -62,7 +62,7 @@ func (c *Core) Delete(url string, handlers ...ControllerHandler) {
 }
 
 // Find route, if not found, return nil
-func (c *Core) FindRouteByRequest(request *http.Request) []ControllerHandler {
+func (c *Core) FindRouteByRequest(request *http.Request) *node {
 	// uri and method must be convert to uppercase
 	uri := request.URL.Path
 	method := request.Method
@@ -70,7 +70,7 @@ func (c *Core) FindRouteByRequest(request *http.Request) []ControllerHandler {
 
 	// Find from level 1 map
 	if methodHandlers, ok := c.router[upperMethod]; ok {
-		return methodHandlers.FindHandler(uri)
+		return methodHandlers.root.matchNode(uri)
 	}
 	return nil
 }
@@ -81,21 +81,25 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	ctx := NewContext(request, response)
 
 	// Find route
-	handlers := c.FindRouteByRequest(request)
-	if handlers == nil {
+	node := c.FindRouteByRequest(request)
+	if node == nil {
+		// Not found route
 		ctx.SetStatus(404).Json("Not found")
 		return
 	}
 
 	// Set context handlers
-	ctx.SetHandlers(handlers)
+	ctx.SetHandlers(node.handlers)
+
+	// set route paramters
+	params := node.parseParamsFromEndNode(request.URL.Path)
+	ctx.SetParams(params)
 
 	// Call route
 	if err := ctx.Next(); err != nil {
 		ctx.SetStatus(500).Json("Internal server error")
-
+		return
 	}
-	log.Println("core.router")
 }
 
 // Group http wrapper
