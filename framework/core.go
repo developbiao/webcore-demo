@@ -83,7 +83,7 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	// Find route
 	handlers := c.FindRouteByRequest(request)
 	if handlers == nil {
-		ctx.Json(404, "Not found")
+		ctx.SetStatus(404).Json("Not found")
 		return
 	}
 
@@ -92,7 +92,7 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 
 	// Call route
 	if err := ctx.Next(); err != nil {
-		ctx.Json(500, "Internal server error")
+		ctx.SetStatus(500).Json("Internal server error")
 
 	}
 	log.Println("core.router")

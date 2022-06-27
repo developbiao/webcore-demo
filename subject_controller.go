@@ -8,37 +8,37 @@ import (
 
 // SubjectAddController
 func SubjectAddController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectAddController")
+	c.SetStatus(200).Json("ok, SubjectAddController")
 	return nil
 }
 
 // SubjectListController
 func SubjectListController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectListController")
+	c.SetStatus(200).Json("ok, SubjectListController")
 	return nil
 }
 
 // SubjectDelController
 func SubjectDelController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectDelController")
+	c.SetStatus(200).Json("ok, SubjectDelController")
 	return nil
 }
 
 // SubjectUpdateController
 func SubjectUpdateController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectUpdateController")
+	c.SetStatus(200).Json("ok, SubjectUpdateController")
 	return nil
 }
 
 // SubjectGetController
 func SubjectGetController(c *framework.Context) error {
-	c.Json(200, "ok, SubjectGetController")
+	c.SetStatus(200).Json("ok, SubjectGetController")
 	return nil
 }
 
 // SubjectNameController
 func SubjectNameController(c *framework.Context) error {
 	time.Sleep(time.Second * 2)
-	c.Json(200, "ok, SubjectNameController")
+	c.SetStatus(200).Json("ok, SubjectNameController")
 	return nil
 }
