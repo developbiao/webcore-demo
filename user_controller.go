@@ -7,7 +7,9 @@ import (
 )
 
 func UserLoginController(c *framework.Context) error {
-	time.Sleep(time.Second * 2)
-	c.SetStatus(200).Json("ok, UserLoginController")
+	foo, _ := c.QueryString("foo", "def")
+	// Wait 10 seconds end
+	time.Sleep(time.Second * 10)
+	c.SetStatus(200).Json("ok, UserLoginController: " + foo)
 	return nil
 }
