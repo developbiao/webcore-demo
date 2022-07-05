@@ -1,26 +1,26 @@
 package main
 
 import (
-	"github.com/developbiao/webcore-demo/framework"
-	"github.com/developbiao/webcore-demo/middleware"
+	"github.com/developbiao/webcore-demo/framework/gin"
+	"github.com/developbiao/webcore-demo/framework/middleware"
 )
 
-func registerRouter(core *framework.Core) {
-	core.Get("/user/login", middleware.Test3(), UserLoginController)
+func registerRouter(core *gin.Engine) {
+	core.GET("/user/login", middleware.Test3(), UserLoginController)
 
 	// Group prefix routes
 	subjectApi := core.Group("/subject")
 	{
 		// Apply middleware test1
-		subjectApi.Delete("/:id", middleware.Test1(), SubjectDelController)
-		subjectApi.Put("/:id", SubjectUpdateController)
-		subjectApi.Get("/:id", SubjectGetController)
-		subjectApi.Get("/list/all", SubjectListController)
+		subjectApi.DELETE("/:id", middleware.Test1(), SubjectDelController)
+		subjectApi.PUT("/:id", SubjectUpdateController)
+		subjectApi.GET("/:id", SubjectGetController)
+		subjectApi.GET("/list/all", SubjectListController)
 
 		// Embedding group
 		subjectInnerApi := subjectApi.Group("/info")
 		{
-			subjectInnerApi.Get("/name", SubjectNameController)
+			subjectInnerApi.GET("/name", SubjectNameController)
 		}
 	}
 }

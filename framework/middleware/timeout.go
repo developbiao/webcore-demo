@@ -1,47 +1,43 @@
-package framework
+package middleware
 
 import (
 	"context"
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/developbiao/webcore-demo/framework/gin"
 )
 
-func TimeoutHandler(fun ControllerHandler, d time.Duration) ControllerHandler {
-	return func(c *Context) error {
+func Timeout(d time.Duration) gin.HandlerFunc {
+	// 使用函数回调
+	return func(c *gin.Context) {
 		finish := make(chan struct{}, 1)
 		panicChan := make(chan interface{}, 1)
-		// Initialize the context
+		// 执行业务逻辑前预操作：初始化超时context
 		durationCtx, cancel := context.WithTimeout(c.BaseContext(), d)
 		defer cancel()
 
-		c.request.WithContext(durationCtx)
-
 		go func() {
-			/// recover from panic
 			defer func() {
 				if p := recover(); p != nil {
 					panicChan <- p
 				}
 			}()
-
-			// Execute logic
-			fun(c)
+			// 使用next执行具体的业务逻辑
+			c.Next()
 
 			finish <- struct{}{}
 		}()
-
+		// 执行业务逻辑后操作
 		select {
 		case p := <-panicChan:
+			c.ISetStatus(500).IJson("time out")
 			log.Println(p)
-			c.responseWriter.WriteHeader(500)
 		case <-finish:
 			fmt.Println("finish")
 		case <-durationCtx.Done():
-			c.SetHasTimeout()
-			c.responseWriter.Write([]byte("timeout"))
+			c.ISetStatus(500).IJson("time out")
 		}
-
-		return nil
 	}
 }

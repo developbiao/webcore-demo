@@ -1,44 +1,33 @@
 package main
 
 import (
-	"time"
+	"fmt"
 
-	"github.com/developbiao/webcore-demo/framework"
+	"github.com/developbiao/webcore-demo/framework/gin"
 )
 
-// SubjectAddController
-func SubjectAddController(c *framework.Context) error {
-	c.SetStatus(200).Json("ok, SubjectAddController")
-	return nil
+func SubjectAddController(c *gin.Context) {
+	c.ISetOkStatus().IJson("ok, SubjectAddController")
 }
 
-// SubjectListController
-func SubjectListController(c *framework.Context) error {
-	c.SetStatus(200).Json("ok, SubjectListController")
-	return nil
+func SubjectListController(c *gin.Context) {
+	c.ISetOkStatus().IJson("ok, SubjectListController")
 }
 
-// SubjectDelController
-func SubjectDelController(c *framework.Context) error {
-	c.SetStatus(200).Json("ok, SubjectDelController")
-	return nil
+func SubjectDelController(c *gin.Context) {
+	c.ISetOkStatus().IJson("ok, SubjectDelController")
 }
 
-// SubjectUpdateController
-func SubjectUpdateController(c *framework.Context) error {
-	c.SetStatus(200).Json("ok, SubjectUpdateController")
-	return nil
+func SubjectUpdateController(c *gin.Context) {
+	c.ISetOkStatus().IJson("ok, SubjectUpdateController")
 }
 
-// SubjectGetController
-func SubjectGetController(c *framework.Context) error {
-	c.SetStatus(200).Json("ok, SubjectGetController")
-	return nil
+func SubjectGetController(c *gin.Context) {
+	subjectId, _ := c.DefaultParamInt("id", 0)
+	c.ISetOkStatus().IJson("ok, SubjectGetController:" + fmt.Sprint(subjectId))
+
 }
 
-// SubjectNameController
-func SubjectNameController(c *framework.Context) error {
-	time.Sleep(time.Second * 2)
-	c.SetStatus(200).Json("ok, SubjectNameController")
-	return nil
+func SubjectNameController(c *gin.Context) {
+	c.ISetOkStatus().IJson("ok, SubjectNameController")
 }

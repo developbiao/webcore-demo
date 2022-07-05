@@ -9,18 +9,13 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/developbiao/webcore-demo/framework"
-	"github.com/developbiao/webcore-demo/middleware"
+	"github.com/developbiao/webcore-demo/framework/gin"
+	"github.com/developbiao/webcore-demo/framework/middleware"
 )
 
 func main() {
-	core := framework.NewCore()
-	// core.Use(
-	// 	middleware.Test1(),
-	// 	middleware.Test2(),
-	// )
-
-	core.Use(middleware.Recovery())
+	core := gin.New()
+	core.Use(gin.Recovery())
 	core.Use(middleware.Cost())
 
 	registerRouter(core)
