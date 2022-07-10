@@ -8,7 +8,7 @@ type ServiceProvider interface {
 	// Regisgter resiter instance on container
 	Register(Container) NewInstance
 
-	// Booth return error service instance fiaure
+	// Boot return error service instance fiaure
 	Boot(Container) error
 
 	// IsDefer false don't need delay initlization
