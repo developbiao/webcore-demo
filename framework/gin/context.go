@@ -19,6 +19,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/developbiao/webcore-demo/framework"
 	"github.com/developbiao/webcore-demo/framework/gin/binding"
 	"github.com/developbiao/webcore-demo/framework/gin/render"
 	"github.com/gin-contrib/sse"
@@ -78,6 +79,9 @@ type Context struct {
 	// SameSite allows a server to define a cookie attribute making it impossible for
 	// the browser to send this cookie along with cross-site requests.
 	sameSite http.SameSite
+
+	// Container
+	container framework.Container
 }
 
 /************************************/
