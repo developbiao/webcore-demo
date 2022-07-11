@@ -4,14 +4,24 @@ import (
 	"fmt"
 
 	"github.com/developbiao/webcore-demo/framework/gin"
+	"github.com/developbiao/webcore-demo/provider/demo"
 )
 
 func SubjectAddController(c *gin.Context) {
 	c.ISetOkStatus().IJson("ok, SubjectAddController")
 }
 
+// corresponding route /subject/list/all
 func SubjectListController(c *gin.Context) {
-	c.ISetOkStatus().IJson("ok, SubjectListController")
+	// Get demo instance
+	demoService := c.MustMake(demo.Key).(demo.Service)
+
+	//  Callback method on instance
+	foo := demoService.GetFoo()
+
+	// Output result
+	c.ISetOkStatus().IJson(foo)
+	// c.ISetOkStatus().IJson("ok, SubjectListController")
 }
 
 func SubjectDelController(c *gin.Context) {

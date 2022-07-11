@@ -29,8 +29,8 @@ func (ctx *Context) Make(key string) (interface{}, error) {
 }
 
 // MustMake context implemnetation must make
-func (ctx *Context) MustMake(key string) (interface{}, error) {
-	return ctx.container.Make(key)
+func (ctx *Context) MustMake(key string) interface{} {
+	return ctx.container.MustMake(key)
 }
 
 // MakeNew context implemnetation make new

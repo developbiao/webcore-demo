@@ -96,7 +96,7 @@ func (web *WebContainer) IsBind(key string) bool {
 // findServiceProvicer
 func (web *WebContainer) findServiceProvider(key string) ServiceProvider {
 	web.lock.RLock()
-	defer web.lock.Unlock()
+	defer web.lock.RUnlock()
 	if sp, ok := web.providers[key]; ok {
 		return sp
 	}
@@ -141,7 +141,7 @@ func (web *WebContainer) newInstance(sp ServiceProvider, params []interface{}) (
 // make real speific instance
 func (web *WebContainer) make(key string, params []interface{}, forceNew bool) (interface{}, error) {
 	web.lock.RLock()
-	defer web.lock.Unlock()
+	defer web.lock.RUnlock()
 	// Query is already registered servcie proviceer, if not regisger will be return error
 	sp := web.findServiceProvider(key)
 	if sp == nil {
