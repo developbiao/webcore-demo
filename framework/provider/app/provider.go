@@ -12,8 +12,7 @@ type WebAppProvider struct {
 
 // Register register web app provider
 func (w *WebAppProvider) Register(container framework.Container) framework.NewInstance {
-	// TODO:: regiser web app
-	return nil
+	return NewWebApp
 }
 
 // Boot boot invock
