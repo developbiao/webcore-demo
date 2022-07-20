@@ -11,7 +11,6 @@ import (
 
 	"github.com/developbiao/webcore-demo/framework/gin"
 	"github.com/developbiao/webcore-demo/framework/middleware"
-	"github.com/developbiao/webcore-demo/framework/provider/app"
 	"github.com/developbiao/webcore-demo/provider/demo"
 )
 
@@ -20,8 +19,7 @@ func main() {
 	core := gin.New()
 
 	// Bindig services
-	core.Bind(&app.WebAppProvider{})
-	core.Bind(&demo.DemoProvider{})
+	core.Bind(&demo.DemoServiceProvider{})
 
 	core.Use(gin.Recovery())
 	core.Use(middleware.Cost())
