@@ -2,22 +2,10 @@ package gin
 
 import (
 	"context"
-
-	"github.com/developbiao/webcore-demo/framework"
 )
 
 func (ctx *Context) BaseContext() context.Context {
 	return ctx.Request.Context()
-}
-
-// Bind engin implemention bind
-func (engin *Engine) Bind(provider framework.ServiceProvider) error {
-	return engin.container.Bind(provider)
-}
-
-// IsBind engin implemnetation  is bind
-func (engin *Engine) IsBind(key string) bool {
-	return engin.container.IsBind(key)
 }
 
 // ----------------------
