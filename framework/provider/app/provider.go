@@ -21,7 +21,7 @@ func (w *WebAppProvider) Boot(container framework.Container) error {
 }
 
 // IsDefer is delay call
-func (w *WebAppProvider) IsDefer(container framework.Container) bool {
+func (w *WebAppProvider) IsDefer() bool {
 	return false
 }
 
@@ -31,6 +31,6 @@ func (w *WebAppProvider) Params(container framework.Container) []interface{} {
 }
 
 // Name get identify
-func (w *WebAppProvider) Name(container framework.Container) string {
+func (w *WebAppProvider) Name() string {
 	return contract.AppKey
 }
