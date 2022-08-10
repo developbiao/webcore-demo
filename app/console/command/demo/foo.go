@@ -1,9 +1,8 @@
 package demo
 
 import (
-	"log"
-
 	"github.com/developbiao/webcore-demo/framework/cobra"
+	"log"
 )
 
 // InitFoo 初始化Foo命令

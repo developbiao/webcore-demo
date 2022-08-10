@@ -16,7 +16,7 @@ func (provider *WebKernelProvider) Register(c framework.Container) framework.New
 	return NewWebKernelService
 }
 
-// Boot bootup check is resigration Engine, if not register new engine instance
+// Boot boot startup check is registration Engine, if not register new engine instance
 func (provider *WebKernelProvider) Boot(c framework.Container) error {
 	if provider.HttpEngine == nil {
 		provider.HttpEngine = gin.Default()
@@ -31,7 +31,7 @@ func (provider *WebKernelProvider) IsDefer() bool {
 }
 
 // Params just a httpEngine
-func (provider *WebKernelProvider) Parmas(c framework.Container) []interface{} {
+func (provider *WebKernelProvider) Params(c framework.Container) []interface{} {
 	return []interface{}{provider.HttpEngine}
 
 }

@@ -4,7 +4,7 @@ import "github.com/developbiao/webcore-demo/framework/gin"
 
 // NewHttpEngine is command
 func NewHttpEngine() (*gin.Engine, error) {
-	// Set release, for defrault prevent ouput debug information
+	// Set release, for defrault prevent output debug information
 	gin.SetMode(gin.ReleaseMode)
 	// Startup default web engine
 	r := gin.Default()

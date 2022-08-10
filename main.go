@@ -9,13 +9,13 @@ import (
 )
 
 func main() {
-	// Initlization container
+	// Initialization container
 	container := framework.NewWebContainer()
 
 	// Bind app service provider
 	container.Bind(&app.WebAppProvider{})
 
-	// Initilization http engine
+	// Initialization http engine
 	if engine, err := http.NewHttpEngine(); err == nil {
 		container.Bind(&kernel.WebKernelProvider{HttpEngine: engine})
 	}

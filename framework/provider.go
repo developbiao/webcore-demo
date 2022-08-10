@@ -5,14 +5,14 @@ type NewInstance func(...interface{}) (interface{}, error)
 
 // ServiceProvider define Service providder
 type ServiceProvider interface {
-	// Regisgter resiter instance on container
+	// Register register instance on container
 	Register(Container) NewInstance
 
-	// Boot return error service instance fiaure
+	// Boot return error service instance fail
 	Boot(Container) error
 
-	// IsDefer false don't need delay initlization
-	// true need delay initilization
+	// IsDefer false don't need delay initialization
+	// true need delay initialization
 	IsDefer() bool
 
 	// Params define new instance paramters
